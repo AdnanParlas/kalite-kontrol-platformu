@@ -235,7 +235,44 @@
     };
   }
 
+  // Demo modunda örnek (sahte) firmalar — companies tablosu boşsa eklenir.
+  function seedIfEmpty() {
+    const db = loadDB();
+    if (db.companies.length > 0) return;
+    const now = new Date().toISOString();
+    const seeds = [
+      { name: "Shenzhen QC Inspection", city: "Shenzhen", latitude: 22.5431, longitude: 114.0579,
+        experience_years: 8, rating: 4.9, services: "PPI, DUPRO, FRI, Yükleme Kontrolü",
+        description: "Elektronik ve aksesuar ürünlerinde uzman, hızlı raporlama." },
+      { name: "Ningbo Quality Service", city: "Ningbo", latitude: 29.8683, longitude: 121.5440,
+        experience_years: 10, rating: 5.0, services: "FRI, Fabrika Denetimi, Yükleme Kontrolü",
+        description: "Ev ürünleri ve mobilyada geniş tecrübe." },
+      { name: "Yiwu Trade Inspection", city: "Yiwu", latitude: 29.3068, longitude: 120.0760,
+        experience_years: 6, rating: 4.8, services: "FRI, DUPRO",
+        description: "Yiwu pazarındaki küçük ürünlerde hızlı kontrol." },
+      { name: "Guangzhou Control Group", city: "Guangzhou", latitude: 23.1291, longitude: 113.2644,
+        experience_years: 12, rating: 4.7, services: "Fabrika Denetimi, PPI, FRI",
+        description: "Tekstil ve ayakkabı denetiminde lider." },
+      { name: "Shanghai Audit Co.", city: "Shanghai", latitude: 31.2304, longitude: 121.4737,
+        experience_years: 9, rating: 4.6, services: "Fabrika Denetimi, DUPRO, Yükleme Kontrolü",
+        description: "ISO uyumlu fabrika denetimleri." },
+    ];
+    seeds.forEach((s, i) => {
+      db.companies.push(Object.assign({
+        id: uid(),
+        owner_id: "seed-" + (i + 1),
+        verified: true,
+        verification_status: "approved",
+        verification_doc_url: null,
+        verification_note: null,
+        created_at: now,
+      }, s));
+    });
+    saveDB(db);
+  }
+
   window.getLocalClient = function () {
+    seedIfEmpty();
     return {
       __local: true,
       auth,

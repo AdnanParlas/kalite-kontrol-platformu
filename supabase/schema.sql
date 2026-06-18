@@ -51,6 +51,8 @@ create table if not exists public.companies (
   description text,
   rating numeric default 0,
   verified boolean default false,
+  latitude numeric,
+  longitude numeric,
   created_at timestamptz default now(),
   unique (owner_id)
 );
@@ -118,10 +120,11 @@ create policy "profiles_update_own" on public.profiles
   for update using (auth.uid() = id);
 
 -- ---------- companies ----------
--- Tüm oturum açmış kullanıcılar firmaları görebilir (müşteri firma listesi).
+-- Firmalar herkese açık görünür (ana sayfadaki harita + firma listesi).
+-- Hassas alanları gizlemek isterseniz bir view kullanın.
 drop policy if exists "companies_select_all" on public.companies;
 create policy "companies_select_all" on public.companies
-  for select using (auth.uid() is not null);
+  for select using (true);
 
 drop policy if exists "companies_insert_own" on public.companies;
 create policy "companies_insert_own" on public.companies

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Çin Kalite Kontrol Platformu</title>
   <meta name="description" content="Türkiye'den Çin'e ürün kalite kontrol platformu." />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
@@ -47,30 +48,13 @@
       </div>
     </section>
 
-    <!-- İki taraflı akış -->
+    <!-- Firma Haritası -->
     <section class="section">
       <div class="container">
-        <h2 data-i18n="flow_title">Nasıl Çalışır?</h2>
-        <p class="lead" data-i18n="flow_lead">İki taraf, tek platform.</p>
-
-        <div class="flow-grid">
-          <!-- Türkiye -->
-          <div class="flow-col tr">
-            <h3 data-i18n="tr_side">🇹🇷 Türkiye / Hizmet Alan</h3>
-            <div class="step"><div class="num">1</div><div><h4 data-i18n="tr_s1_t">Kayıt & Talep</h4><p data-i18n="tr_s1_d"></p></div></div>
-            <div class="step"><div class="num">2</div><div><h4 data-i18n="tr_s2_t">Talep Yayınlanır</h4><p data-i18n="tr_s2_d"></p></div></div>
-            <div class="step"><div class="num">3</div><div><h4 data-i18n="tr_s3_t">Teklif & Onay</h4><p data-i18n="tr_s3_d"></p></div></div>
-            <div class="step"><div class="num">4</div><div><h4 data-i18n="tr_s4_t">Rapor Teslim</h4><p data-i18n="tr_s4_d"></p></div></div>
-          </div>
-          <!-- Çin -->
-          <div class="flow-col cn">
-            <h3 data-i18n="cn_side">🇨🇳 Çin / Kalite Kontrol Firması</h3>
-            <div class="step"><div class="num">1</div><div><h4 data-i18n="cn_s1_t">Firma Kaydı</h4><p data-i18n="cn_s1_d"></p></div></div>
-            <div class="step"><div class="num">2</div><div><h4 data-i18n="cn_s2_t">Görevleri Gör</h4><p data-i18n="cn_s2_d"></p></div></div>
-            <div class="step"><div class="num">3</div><div><h4 data-i18n="cn_s3_t">Teklif & Onay</h4><p data-i18n="cn_s3_d"></p></div></div>
-            <div class="step"><div class="num">4</div><div><h4 data-i18n="cn_s4_t">Kontrol & Rapor</h4><p data-i18n="cn_s4_d"></p></div></div>
-          </div>
-        </div>
+        <h2 data-i18n="map_title">Kayıtlı Firmaların Konumları</h2>
+        <p class="lead" data-i18n="map_lead">Çin'deki kalite kontrol firmalarını haritada görün.</p>
+        <div id="firmMap" class="firm-map"></div>
+        <p id="map-empty" class="empty hidden" data-i18n="map_empty">Henüz haritada gösterilecek firma yok.</p>
       </div>
     </section>
 
@@ -94,6 +78,12 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/localdb.js"></script>
+  <script src="js/supabaseClient.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/map.js"></script>
 </body>
 </html>

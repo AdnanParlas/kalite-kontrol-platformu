@@ -27,6 +27,9 @@ const I18N = {
     // flow
     flow_title: "Nasıl Çalışır?",
     flow_lead: "İki taraf, tek platform: Türkiye'deki hizmet alanlar ve Çin'deki kalite kontrol firmaları.",
+    map_title: "Kayıtlı Firmaların Konumları",
+    map_lead: "Çin'deki kalite kontrol firmalarını haritada görün. Pine tıklayınca firma bilgileri çıkar.",
+    map_empty: "Henüz haritada gösterilecek firma yok.",
     tr_side: "🇹🇷 Türkiye / Hizmet Alan",
     cn_side: "🇨🇳 Çin / Kalite Kontrol Firması",
 
@@ -207,6 +210,9 @@ const I18N = {
 
     flow_title: "How It Works",
     flow_lead: "Two sides, one platform: customers in Türkiye and quality control firms in China.",
+    map_title: "Registered Firms' Locations",
+    map_lead: "See quality control firms in China on the map. Click a pin for firm details.",
+    map_empty: "No firms to show on the map yet.",
     tr_side: "🇹🇷 Türkiye / Customer",
     cn_side: "🇨🇳 China / Inspection Firm",
 

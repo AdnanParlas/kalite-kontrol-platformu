@@ -271,6 +271,18 @@ footer.site {
 
 .hidden { display: none !important; }
 
+/* ---------- Firma haritası ---------- */
+.firm-map {
+  height: 460px;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  z-index: 1;
+}
+.firm-map .leaflet-popup-content { font-size: .9rem; line-height: 1.4; }
+
 /* ---------- Mesajlaşma ---------- */
 .msg-thread { margin-top: 10px; }
 .msg-list {
