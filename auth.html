@@ -86,6 +86,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
+  <script src="js/localdb.js"></script>
   <script src="js/supabaseClient.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/auth.js"></script>
@@ -126,10 +127,8 @@
     // yapılandırma uyarısı + zaten girişliyse panele yönlendir
     (async () => {
       window.showConfigWarningIfNeeded();
-      if (window.isConfigured && window.isConfigured()) {
-        const session = await Auth.getSession();
-        if (session) window.location.href = "dashboard.html";
-      }
+      const session = await Auth.getSession();
+      if (session) window.location.href = "dashboard.html";
     })();
 
     // GİRİŞ

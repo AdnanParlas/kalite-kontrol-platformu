@@ -142,6 +142,7 @@ const I18N = {
     status_label: "Durum",
     loading: "Yükleniyor...",
     config_warning: "⚠️ Supabase ayarları yapılmadı. js/config.js dosyasını doldurun (README'ye bakın). Şu an site demo modunda ve giriş/kayıt çalışmaz.",
+    local_mode_warning: "🧪 Demo (yerel) mod: kayıt ve giriş çalışır, ancak veriler yalnızca BU tarayıcıda saklanır (başka cihaz/kişi göremez). Supabase anahtarlarını girince gerçek ve paylaşımlı olur.",
 
     // mesajlaşma
     messages: "Mesajlar",
@@ -317,6 +318,7 @@ const I18N = {
     status_label: "Status",
     loading: "Loading...",
     config_warning: "⚠️ Supabase is not configured. Fill js/config.js (see README). The site is in demo mode and auth won't work.",
+    local_mode_warning: "🧪 Demo (local) mode: sign up and login work, but data is stored only in THIS browser (other devices/people can't see it). Add your Supabase keys to make it real and shared.",
 
     messages: "Messages",
     msg_send: "Send",
