@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panelim — Çin Kalite Kontrol</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="logo">🛡️</span>
+        <span data-i18n="brand">Çin Kalite Kontrol</span>
+      </a>
+      <nav>
+        <div class="lang-switch">
+          <button data-lang="tr">TR</button>
+          <button data-lang="en">EN</button>
+        </div>
+        <a id="admin-link" href="admin.html" class="btn btn-light hidden" data-i18n="nav_admin">Yönetici</a>
+        <button id="logout-btn" class="btn btn-ghost" data-i18n="nav_logout">Çıkış</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container dash">
+      <div class="dash-head">
+        <div>
+          <h1 id="welcome-text">—</h1>
+          <span id="role-chip" class="role-chip">—</span>
+        </div>
+      </div>
+
+      <div id="loading" class="loader" data-i18n="loading">Yükleniyor...</div>
+
+      <!-- ================= MÜŞTERİ PANELİ ================= -->
+      <div id="customer-panel" class="hidden">
+        <div class="dash-grid">
+          <!-- Sol: yeni talep -->
+          <div>
+            <div class="panel">
+              <h2>➕ <span data-i18n="new_request">Yeni Talep Oluştur</span></h2>
+              <div id="req-msg" class="form-msg"></div>
+              <form id="request-form">
+                <div class="field">
+                  <label data-i18n="f_product">Ürün Adı</label>
+                  <input type="text" name="product_name" required />
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <label data-i18n="f_factory">Fabrika Adı</label>
+                    <input type="text" name="factory_name" />
+                  </div>
+                  <div class="field">
+                    <label data-i18n="f_factory_city">Fabrika Şehri</label>
+                    <input type="text" name="factory_city" />
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <label data-i18n="f_control_type">Kontrol Türü</label>
+                    <select name="control_type">
+                      <option value="pre" data-i18n="ctrl_pre">Üretim Öncesi (PPI)</option>
+                      <option value="during" data-i18n="ctrl_during">Üretim Sırası (DUPRO)</option>
+                      <option value="final" data-i18n="ctrl_final">Final Kontrol (FRI)</option>
+                      <option value="loading" data-i18n="ctrl_loading">Yükleme Kontrolü (LI)</option>
+                      <option value="audit" data-i18n="ctrl_factory_audit">Fabrika Denetimi</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label data-i18n="f_quantity">Miktar</label>
+                    <input type="number" name="quantity" min="1" />
+                  </div>
+                </div>
+                <div class="field">
+                  <label data-i18n="f_notes">Notlar / Detay</label>
+                  <textarea name="notes"></textarea>
+                  <button type="button" id="ai-form-btn" class="btn btn-outline btn-sm" style="margin-top:8px" data-i18n="ai_generate">🪄 Akıllı Form Oluştur</button>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%" data-i18n="btn_create_request">Talebi Oluştur</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Sağ: firmalar + talepler -->
+          <div>
+            <div class="panel">
+              <h2>🏭 <span data-i18n="companies_title">Kayıtlı Firmalar</span></h2>
+              <div id="companies-list"></div>
+            </div>
+            <div class="panel">
+              <h2>📋 <span data-i18n="my_requests">Taleplerim</span></h2>
+              <div id="my-requests-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= FİRMA PANELİ ================= -->
+      <div id="firm-panel" class="hidden">
+        <div class="dash-grid">
+          <!-- Sol: firma profili -->
+          <div>
+            <div class="panel">
+              <h2>🏢 <span data-i18n="company_profile">Firma Profilim</span> <span id="verify-tag"></span></h2>
+              <div id="company-msg" class="form-msg"></div>
+              <form id="company-form">
+                <div class="field">
+                  <label data-i18n="f_company_name">Firma Adı</label>
+                  <input type="text" name="name" required />
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <label data-i18n="city">Şehir</label>
+                    <input type="text" name="city" />
+                  </div>
+                  <div class="field">
+                    <label data-i18n="f_experience">Deneyim (yıl)</label>
+                    <input type="number" name="experience_years" min="0" />
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <label data-i18n="f_license">Lisans No</label>
+                    <input type="text" name="license_no" />
+                  </div>
+                  <div class="field">
+                    <label data-i18n="f_certificate">Sertifika</label>
+                    <input type="text" name="certificate_info" />
+                  </div>
+                </div>
+                <div class="field">
+                  <label data-i18n="f_services">Hizmetler</label>
+                  <input type="text" name="services" placeholder="PPI, DUPRO, FRI..." />
+                </div>
+                <div class="field">
+                  <label data-i18n="f_description">Açıklama</label>
+                  <textarea name="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%" data-i18n="btn_save_company">Firmayı Kaydet</button>
+              </form>
+
+              <hr class="divider" />
+              <h2 style="font-size:1.05rem">🪪 <span data-i18n="ver_section">Doğrulama</span> <span id="ver-status-tag"></span></h2>
+              <div id="ver-note" class="meta"></div>
+              <div class="field" style="margin-top:8px">
+                <label data-i18n="ver_doc">Doğrulama belgesi</label>
+                <input type="file" id="ver-file" accept=".pdf,image/*" />
+              </div>
+              <button id="ver-upload-btn" class="btn btn-outline btn-sm" data-i18n="ver_upload_btn">Belge Yükle & Doğrulama İste</button>
+              <span id="ver-msg" class="meta"></span>
+            </div>
+          </div>
+
+          <!-- Sağ: açık talepler + işlerim -->
+          <div>
+            <div class="panel">
+              <h2>📥 <span data-i18n="open_requests">Açık Talepler</span></h2>
+              <div id="open-requests-list"></div>
+            </div>
+            <div class="panel">
+              <h2>🧰 <span data-i18n="my_jobs">İşlerim</span></h2>
+              <div id="my-jobs-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site">
+    <div class="container"><span data-i18n="brand">Çin Kalite Kontrol</span> · © 2026</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/messages.js"></script>
+  <script src="js/musteri.js"></script>
+  <script src="js/firma.js"></script>
+  <script>
+    document.getElementById("logout-btn").addEventListener("click", () => Auth.signOut());
+
+    (async () => {
+      if (window.showConfigWarningIfNeeded()) {
+        document.getElementById("loading").classList.add("hidden");
+        return;
+      }
+      const profile = await Auth.requireAuth();
+      if (!profile) return; // requireAuth yönlendirir
+
+      window.currentUserId = profile.id;
+      if (profile.is_admin) document.getElementById("admin-link").classList.remove("hidden");
+      document.getElementById("loading").classList.add("hidden");
+      const name = profile.full_name || profile.email || "";
+      document.getElementById("welcome-text").textContent = window.i18n.t("welcome") + ", " + name;
+
+      const chip = document.getElementById("role-chip");
+      if (profile.role === "firma") {
+        chip.textContent = window.i18n.t("panel_firm");
+        chip.classList.add("firma");
+        document.getElementById("firm-panel").classList.remove("hidden");
+        window.initFirma(profile);
+      } else {
+        chip.textContent = window.i18n.t("panel_customer");
+        document.getElementById("customer-panel").classList.remove("hidden");
+        window.initMusteri(profile);
+      }
+    })();
+  </script>
+</body>
+</html>

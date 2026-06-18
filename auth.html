@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giriş / Kayıt — Çin Kalite Kontrol</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="logo">🛡️</span>
+        <span data-i18n="brand">Çin Kalite Kontrol</span>
+      </a>
+      <nav>
+        <div class="lang-switch">
+          <button data-lang="tr">TR</button>
+          <button data-lang="en">EN</button>
+        </div>
+        <a href="index.html" class="btn btn-ghost" data-i18n="nav_home">Ana Sayfa</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="auth-wrap">
+      <div class="card-panel">
+        <div class="tabs">
+          <button id="tab-login" class="active" data-i18n="tab_login">Giriş Yap</button>
+          <button id="tab-register" data-i18n="tab_register">Kayıt Ol</button>
+        </div>
+
+        <div id="msg" class="form-msg"></div>
+
+        <!-- GİRİŞ -->
+        <form id="login-form">
+          <div class="field">
+            <label data-i18n="f_email">E-posta</label>
+            <input type="email" name="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label data-i18n="f_password">Şifre</label>
+            <input type="password" name="password" required autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%" data-i18n="btn_login">Giriş Yap</button>
+        </form>
+
+        <!-- KAYIT -->
+        <form id="register-form" class="hidden">
+          <div class="role-picker">
+            <label class="role-opt selected" data-role="musteri">
+              <input type="radio" name="role" value="musteri" checked hidden />
+              <div class="ic">🇹🇷</div>
+              <strong data-i18n="role_customer">Müşteri</strong>
+              <span data-i18n="role_customer_d">Hizmet alan (Türkiye)</span>
+            </label>
+            <label class="role-opt" data-role="firma">
+              <input type="radio" name="role" value="firma" hidden />
+              <div class="ic">🇨🇳</div>
+              <strong data-i18n="role_firm">Firma</strong>
+              <span data-i18n="role_firm_d">Kalite kontrol firması (Çin)</span>
+            </label>
+          </div>
+          <div class="field">
+            <label data-i18n="f_fullname">Ad Soyad / Yetkili</label>
+            <input type="text" name="full_name" required />
+          </div>
+          <div class="field">
+            <label data-i18n="f_email">E-posta</label>
+            <input type="email" name="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label data-i18n="f_phone">Telefon</label>
+            <input type="text" name="phone" />
+          </div>
+          <div class="field">
+            <label data-i18n="f_password">Şifre</label>
+            <input type="password" name="password" required minlength="6" autocomplete="new-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%" data-i18n="btn_register">Kayıt Ol</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    const tabLogin = document.getElementById("tab-login");
+    const tabRegister = document.getElementById("tab-register");
+    const loginForm = document.getElementById("login-form");
+    const registerForm = document.getElementById("register-form");
+    const msg = document.getElementById("msg");
+
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = "form-msg show " + type;
+    }
+    function clearMsg() { msg.className = "form-msg"; }
+
+    function activate(which) {
+      const isLogin = which === "login";
+      tabLogin.classList.toggle("active", isLogin);
+      tabRegister.classList.toggle("active", !isLogin);
+      loginForm.classList.toggle("hidden", !isLogin);
+      registerForm.classList.toggle("hidden", isLogin);
+      clearMsg();
+    }
+    tabLogin.addEventListener("click", () => activate("login"));
+    tabRegister.addEventListener("click", () => activate("register"));
+    if (location.hash === "#register") activate("register");
+
+    // rol seçici görsel
+    document.querySelectorAll(".role-opt").forEach(opt => {
+      opt.addEventListener("click", () => {
+        document.querySelectorAll(".role-opt").forEach(o => o.classList.remove("selected"));
+        opt.classList.add("selected");
+        opt.querySelector("input").checked = true;
+      });
+    });
+
+    // yapılandırma uyarısı + zaten girişliyse panele yönlendir
+    (async () => {
+      window.showConfigWarningIfNeeded();
+      if (window.isConfigured && window.isConfigured()) {
+        const session = await Auth.getSession();
+        if (session) window.location.href = "dashboard.html";
+      }
+    })();
+
+    // GİRİŞ
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMsg();
+      const fd = new FormData(loginForm);
+      const btn = loginForm.querySelector("button");
+      btn.disabled = true;
+      try {
+        await Auth.signIn({ email: fd.get("email"), password: fd.get("password") });
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        showMsg(err.message || "Giriş başarısız.", "error");
+        btn.disabled = false;
+      }
+    });
+
+    // KAYIT
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMsg();
+      const fd = new FormData(registerForm);
+      const btn = registerForm.querySelector("button");
+      btn.disabled = true;
+      try {
+        const data = await Auth.signUp({
+          email: fd.get("email"),
+          password: fd.get("password"),
+          role: fd.get("role"),
+          full_name: fd.get("full_name"),
+          phone: fd.get("phone"),
+        });
+        // E-posta doğrulaması kapalıysa session döner -> direkt panele
+        if (data.session) {
+          window.location.href = "dashboard.html";
+        } else {
+          showMsg(window.i18n.t("register_success"), "success");
+          activate("login");
+        }
+      } catch (err) {
+        showMsg(err.message || "Kayıt başarısız.", "error");
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

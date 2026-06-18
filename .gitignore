@@ -1,0 +1,8 @@
+# Kişisel / yerel dosyalar
+*.jpeg
+*.jpg
+.claude/
+
+# OS
+Thumbs.db
+.DS_Store

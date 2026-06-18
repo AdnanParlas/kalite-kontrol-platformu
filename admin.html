@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yönetici — Çin Kalite Kontrol</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="logo">🛡️</span>
+        <span data-i18n="brand">Çin Kalite Kontrol</span>
+      </a>
+      <nav>
+        <div class="lang-switch">
+          <button data-lang="tr">TR</button>
+          <button data-lang="en">EN</button>
+        </div>
+        <a href="dashboard.html" class="btn btn-ghost" data-i18n="nav_dashboard">Panelim</a>
+        <button id="logout-btn" class="btn btn-ghost" data-i18n="nav_logout">Çıkış</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container dash">
+      <div class="dash-head">
+        <h1 data-i18n="admin_title">Yönetici — Firma Doğrulama</h1>
+      </div>
+
+      <div id="loading" class="loader" data-i18n="loading">Yükleniyor...</div>
+      <div id="unauthorized" class="hidden empty" data-i18n="admin_unauthorized">Yetkiniz yok.</div>
+
+      <div id="admin-content" class="hidden">
+        <div class="panel">
+          <h2>⏳ <span data-i18n="admin_pending">Doğrulama Bekleyenler</span></h2>
+          <div id="pending-list"></div>
+        </div>
+        <div class="panel">
+          <h2>🏭 <span data-i18n="admin_all">Tüm Firmalar</span></h2>
+          <div id="all-list"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site">
+    <div class="container"><span data-i18n="brand">Çin Kalite Kontrol</span> · © 2026</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+  <script>
+    document.getElementById("logout-btn").addEventListener("click", () => Auth.signOut());
+    (async () => {
+      if (window.showConfigWarningIfNeeded()) {
+        document.getElementById("loading").classList.add("hidden");
+        return;
+      }
+      const profile = await Auth.requireAuth();
+      if (!profile) return;
+      document.getElementById("loading").classList.add("hidden");
+      if (!profile.is_admin) {
+        document.getElementById("unauthorized").classList.remove("hidden");
+        return;
+      }
+      document.getElementById("admin-content").classList.remove("hidden");
+      window.initAdmin(profile);
+    })();
+  </script>
+</body>
+</html>
